@@ -1,4 +1,4 @@
-package com.example.nick.ountrypedia;
+package com.example.nick.countrypedia;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

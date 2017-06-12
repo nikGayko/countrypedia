@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Сountrypedia</string>
+    <string name="search_for_country">Search for country</string>
 </resources>
