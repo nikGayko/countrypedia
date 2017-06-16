@@ -21,6 +21,10 @@ class CountryListAdapter extends RecyclerView.Adapter<CountryListAdapter.ViewHol
         mCountriesList = countries;
     }
 
+    public void setData(ArrayList<Country> countriesList) {
+        mCountriesList = countriesList;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.view_country, viewGroup, false);

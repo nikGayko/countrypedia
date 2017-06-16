@@ -1,10 +1,7 @@
-package com.example.nick.countrypedia.restprovider;
-
-import android.util.Log;
+package com.example.nick.countrypedia.model.restprovider;
 
 import com.example.nick.countrypedia.Country;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 
 import org.json.JSONArray;
 import org.json.JSONException;

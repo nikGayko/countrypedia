@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    >
+
+    <TextView
+        style="@style/group_name"
+        android:text="@string/search_by"/>
+
+    <FrameLayout
+        style="@style/item_container">
+
+        <CheckBox
+            android:id="@+id/countryCheck"
+            style="@style/item"
+            android:onClick="checkBoxClicked"/>
+
+        <EditText
+            style="@style/item_name"
+            android:text="@string/country"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        style="@style/item_container">
+
+        <CheckBox
+            android:id="@+id/capitalCheck"
+            style="@style/item"
+            android:onClick="checkBoxClicked"
+            />
+
+        <EditText
+            style="@style/item_name"
+            android:text="@string/capital"/>
+
+    </FrameLayout>
+
+    <TextView
+        style="@style/group_name"
+        android:text="@string/display_by"/>
+
+
+    <FrameLayout
+        style="@style/item_container">
+
+        <RadioButton
+            android:id="@+id/regionRadio"
+            android:onClick="radioButtonClicked"
+            style="@style/item"/>
+
+        <EditText
+            style="@style/item_name"
+            android:text="@string/region"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        style="@style/item_container">
+
+        <RadioButton
+            android:id="@+id/alphabetRadio"
+            android:onClick="radioButtonClicked"
+            style="@style/item"/>
+
+        <EditText
+            style="@style/item_name"
+            android:text="@string/alphabet"/>
+
+    </FrameLayout>
+
+</LinearLayout>

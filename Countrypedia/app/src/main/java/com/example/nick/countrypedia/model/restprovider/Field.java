@@ -1,4 +1,4 @@
-package com.example.nick.countrypedia.restprovider;
+package com.example.nick.countrypedia.model.restprovider;
 
 public enum Field {
     NAME {

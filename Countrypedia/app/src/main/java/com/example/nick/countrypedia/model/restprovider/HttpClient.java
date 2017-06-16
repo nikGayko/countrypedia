@@ -1,7 +1,6 @@
-package com.example.nick.countrypedia.restprovider;
+package com.example.nick.countrypedia.model.restprovider;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
