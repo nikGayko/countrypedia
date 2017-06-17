@@ -1,7 +1,6 @@
 package com.example.nick.countrypedia.view;
 
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -10,8 +9,10 @@ import android.widget.CheckBox;
 import android.widget.RadioButton;
 
 import com.example.nick.countrypedia.R;
-import com.example.nick.countrypedia.model.SearchParameter;
+import com.example.nick.countrypedia.model.SettingsManager;
 import com.example.nick.countrypedia.model.StateManager;
+import com.example.nick.countrypedia.model.parameter.DisplayParameter;
+import com.example.nick.countrypedia.model.parameter.SearchParameter;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -22,7 +23,7 @@ public class SettingsActivity extends AppCompatActivity {
     RadioButton mRegionRadio;
     RadioButton mAlphabetRadio;
 
-    StateManager mStateManager;
+    SettingsManager mSettingsManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,20 +31,42 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mStateManager = StateManager.getInstance();
+
+        mSettingsManager = SettingsManager.getInstance();
 
         mCheckBoxGroup = new CheckBoxGroup();
 
         mCountryCheck = ((CheckBox) findViewById(R.id.countryCheck));
         mCapitalCheck = ((CheckBox) findViewById(R.id.capitalCheck));
 
-        mCheckBoxGroup.addCheckBox(mCountryCheck);
-        mCheckBoxGroup.addCheckBox(mCapitalCheck);
-
         mRegionRadio = ((RadioButton) findViewById(R.id.regionRadio));
         mAlphabetRadio = ((RadioButton) findViewById(R.id.alphabetRadio));
 
 
+
+        initialization();
+    }
+
+    private void initialization() {
+        boolean searchCountry = mSettingsManager.isSearchCountry();
+        boolean searchCapital = mSettingsManager.isSearchCapital();
+
+        mCountryCheck.setChecked(searchCountry);
+        mCapitalCheck.setChecked(searchCapital);
+
+        mCheckBoxGroup.addCheckBox(mCountryCheck);
+        mCheckBoxGroup.addCheckBox(mCapitalCheck);
+
+//        checkBoxClicked(SearchParameter.BY_COUNTRY, searchCountry);
+//        checkBoxClicked(SearchParameter.BY_CAPITAL, searchCapital);
+
+        switch (mSettingsManager.getDisplayParameter()) {
+            case REGION:
+                mRegionRadio.setChecked(true);
+                break;
+            case ALPHABET:
+                mAlphabetRadio.setChecked(true);
+        }
     }
 
 
@@ -56,33 +79,33 @@ public class SettingsActivity extends AppCompatActivity {
     public void radioButtonClicked(View view) {
         switch (view.getId()) {
             case R.id.regionRadio:
+                mSettingsManager.setDisplayParameter(DisplayParameter.REGION, this);
                 mAlphabetRadio.setChecked(false);
                 break;
             case R.id.alphabetRadio:
+                mSettingsManager.setDisplayParameter(DisplayParameter.ALPHABET, this);
                 mRegionRadio.setChecked(false);
                 break;
         }
     }
 
-    public void checkBoxClicked(View view) {
-        CheckBox checkBox = (CheckBox) view;
-        if (checkBox.isChecked()) {
-            mCheckBoxGroup.incrementCount();
-            mStateManager.addSearchParameter(getSearchParameterById(checkBox.getId()));
-        } else {
-            mCheckBoxGroup.decrementCount();
-            mStateManager.removeSearchParameter(getSearchParameterById(checkBox.getId()));
-        }
+    public void countryCheckClicked(View view) {
+        boolean checked = ((CheckBox) view).isChecked();
+        mSettingsManager.setSearchCountry(checked, this);
+        checkBoxChangeValue(SearchParameter.BY_COUNTRY, checked);
     }
 
-    private SearchParameter getSearchParameterById(@IdRes int id) {
-        switch (id) {
-            case R.id.capitalCheck:
-                return SearchParameter.BY_CAPITAL;
-            case R.id.countryCheck:
-                return SearchParameter.BY_COUNTRY;
-            default:
-                return null;
+    public void capitalCheckClicked(View view) {
+        boolean checked = ((CheckBox) view).isChecked();
+        mSettingsManager.setSearchCapital(checked, this);
+        checkBoxChangeValue(SearchParameter.BY_CAPITAL, checked);
+    }
+
+    private void checkBoxChangeValue(SearchParameter searchParameter, boolean value) {
+        if (value) {
+            mCheckBoxGroup.incrementCount();
+        } else {
+            mCheckBoxGroup.decrementCount();
         }
     }
 }

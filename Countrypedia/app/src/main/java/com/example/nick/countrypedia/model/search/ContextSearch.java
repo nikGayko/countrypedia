@@ -1,7 +1,7 @@
 package com.example.nick.countrypedia.model.search;
 
 import com.example.nick.countrypedia.Country;
-import com.example.nick.countrypedia.model.SearchParameter;
+import com.example.nick.countrypedia.model.parameter.SearchParameter;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -7,21 +7,13 @@
     tools:context="com.example.nick.countrypedia.view.MainActivity"
     >
 
-    <LinearLayout
+    <EditText
+        android:id="@+id/searchField"
+        style="@style/searchField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusableInTouchMode="true"
-        android:background="@color/nearFieldBackground">
-
-        <EditText
-            style="@style/searchField"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:id="@+id/searchField"
-            android:hint="@string/search_for_country"
-            />
-
-    </LinearLayout>
+        android:hint="@string/search_for_country"
+        />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -35,7 +27,7 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="50dp"
         >
 
 

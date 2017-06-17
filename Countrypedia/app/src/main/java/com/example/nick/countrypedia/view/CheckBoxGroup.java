@@ -39,7 +39,7 @@ class CheckBoxGroup {
         if(updatedCount == 1) {
             blockCheckedLast();
         } else {
-            unblockAll();
+            unblockCheckLast();
         }
         mSelectedCount = updatedCount;
     }
@@ -47,7 +47,7 @@ class CheckBoxGroup {
     void incrementCount() {
         mSelectedCount++;
         if (mSelectedCount > 1) {
-            unblockAll();
+            unblockCheckLast();
         } else {
             blockCheckedLast();
         }
@@ -61,7 +61,7 @@ class CheckBoxGroup {
 
     }
 
-    private void unblockAll() {
+    private void unblockCheckLast() {
 
         for (CheckBox checkBox :
                 mCheckBoxSet) {
@@ -77,6 +77,7 @@ class CheckBoxGroup {
                 mCheckBoxSet) {
             if (checkBox.isChecked()) {
                 checkBox.setEnabled(false);
+                break;
             }
         }
     }

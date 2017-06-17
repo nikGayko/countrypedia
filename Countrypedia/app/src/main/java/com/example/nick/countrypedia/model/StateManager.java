@@ -5,7 +5,7 @@ import android.os.Message;
 
 import com.example.nick.countrypedia.Country;
 import com.example.nick.countrypedia.Notify;
-import com.example.nick.countrypedia.model.cacheprovider.CacheProvider;
+import com.example.nick.countrypedia.model.parameter.SearchParameter;
 import com.example.nick.countrypedia.model.restprovider.Field;
 import com.example.nick.countrypedia.model.restprovider.Provider;
 import com.example.nick.countrypedia.model.search.ContextSearch;
@@ -76,11 +76,11 @@ public class StateManager implements Search {
         });
     }
 
-    public void addSearchParameter(SearchParameter searchParameter) {
+    void addSearchParameter(SearchParameter searchParameter) {
         mContextSearch.addSearch(searchParameter);
     }
 
-    public void removeSearchParameter(SearchParameter searchParameter) {
+    void removeSearchParameter(SearchParameter searchParameter) {
         mContextSearch.removeSearch(searchParameter);
     }
 

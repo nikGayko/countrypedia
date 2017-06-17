@@ -16,7 +16,8 @@ import android.widget.ProgressBar;
 import com.example.nick.countrypedia.Country;
 import com.example.nick.countrypedia.Notify;
 import com.example.nick.countrypedia.R;
-import com.example.nick.countrypedia.model.SearchParameter;
+import com.example.nick.countrypedia.model.SettingsManager;
+import com.example.nick.countrypedia.model.parameter.SearchParameter;
 import com.example.nick.countrypedia.model.StateManager;
 
 import java.util.ArrayList;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements Notify {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SettingsManager.getInstance().initialization(this);
 
         mStateManager = StateManager.getInstance();
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -71,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements Notify {
 
 
         mStateManager.updateCountryList(this);
-        mStateManager.addSearchParameter(SearchParameter.BY_COUNTRY);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
         mSearchField.addTextChangedListener(mTextWatcher);

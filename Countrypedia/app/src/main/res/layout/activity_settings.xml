@@ -18,7 +18,7 @@
         <CheckBox
             android:id="@+id/countryCheck"
             style="@style/item"
-            android:onClick="checkBoxClicked"/>
+            android:onClick="countryCheckClicked"/>
 
         <EditText
             style="@style/item_name"
@@ -32,7 +32,7 @@
         <CheckBox
             android:id="@+id/capitalCheck"
             style="@style/item"
-            android:onClick="checkBoxClicked"
+            android:onClick="capitalCheckClicked"
             />
 
         <EditText
