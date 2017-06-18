@@ -39,11 +39,22 @@ public class ContextSearch implements Search {
 
     @Override
     public ArrayList<Country> search(ArrayList<Country> list, String searchQuery) {
-        ArrayList<Country> countryList = new ArrayList<>();
-        for (Search search :
-                mSearchList) {
-            countryList.addAll(search.search(list, searchQuery));
+        if (mSearchList.size() > 1) {
+            ArrayList<Country> arrayList = new ArrayList<>();
+            for (Search search :
+                    mSearchList) {
+                ArrayList<Country> searchResult = search.search(list, searchQuery);
+                for (Country country :
+                        searchResult) {
+                    if (!arrayList.contains(country)) {
+                        arrayList.add(country);
+                    }
+                }
+            }
+            return arrayList;
+        } else {
+            return mSearchList.iterator().next().search(list, searchQuery);
         }
-        return countryList;
     }
+    
 }

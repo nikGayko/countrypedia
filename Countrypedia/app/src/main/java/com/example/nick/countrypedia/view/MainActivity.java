@@ -21,6 +21,7 @@ import com.example.nick.countrypedia.model.parameter.SearchParameter;
 import com.example.nick.countrypedia.model.StateManager;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class MainActivity extends AppCompatActivity implements Notify {
 

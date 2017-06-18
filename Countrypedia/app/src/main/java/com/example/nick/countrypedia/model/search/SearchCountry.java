@@ -3,6 +3,7 @@ package com.example.nick.countrypedia.model.search;
 import com.example.nick.countrypedia.Country;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class SearchCountry implements Search{
 
@@ -22,7 +23,7 @@ public class SearchCountry implements Search{
         if(start == -1) {
             return new ArrayList<>();
         } else {
-            return new ArrayList<Country>(countriesList.subList(start, z));
+            return new ArrayList<>(countriesList.subList(start, z));
         }
     }
 }
