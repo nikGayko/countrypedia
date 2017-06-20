@@ -13,7 +13,6 @@
 
     <TextView
         android:id="@+id/countryLabel"
-        android:text="Belarus"
         android:fontFamily=""
         android:layout_marginTop="5dp"
         android:layout_marginLeft="15dp"
@@ -24,7 +23,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Minsk"
         android:id="@+id/capitalLabel"
         style="@style/itemTextStyle"
         android:textColor="@android:color/darker_gray"

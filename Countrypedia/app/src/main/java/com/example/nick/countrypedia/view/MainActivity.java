@@ -10,25 +10,26 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.example.nick.countrypedia.Country;
+import com.example.nick.countrypedia.view.item.Country;
 import com.example.nick.countrypedia.Notify;
 import com.example.nick.countrypedia.R;
 import com.example.nick.countrypedia.model.SettingsManager;
-import com.example.nick.countrypedia.model.parameter.SearchParameter;
 import com.example.nick.countrypedia.model.StateManager;
+import com.example.nick.countrypedia.view.item.ListItem;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class MainActivity extends AppCompatActivity implements Notify {
 
     StateManager mStateManager;
 
     RecyclerView mRecyclerView;
-    CountryListAdapter mRecyclerAdapter;
+    CountryListAdapter mCountryListAdapter;
     ProgressBar mProgressBar;
     EditText mSearchField;
 
@@ -48,18 +49,19 @@ public class MainActivity extends AppCompatActivity implements Notify {
             String searchQuery = s.toString();
             if(!searchQuery.equals("")) {
                 searchQuery = searchQuery.substring(0, 1).toUpperCase() + searchQuery.substring(1);
-                updateRecyclerData(mStateManager.search(mStateManager.getCountriesList(), searchQuery));
+                ArrayList<Country> search = mStateManager.search(mStateManager.getCountriesList(), searchQuery);
+                mRecyclerView.setAdapter(new CountryListAdapter(new ArrayList<ListItem>(search)));
             } else {
-                updateRecyclerData(mStateManager.getCountriesList());
+                mRecyclerView.setAdapter(mCountryListAdapter);
             }
         }
     };
 
-    private void updateRecyclerData(ArrayList<Country> countries) {
-        mRecyclerAdapter.setData(countries);
-        mRecyclerAdapter.notifyDataSetChanged();
-        mRecyclerView.scrollToPosition(0);
-    }
+//    private void updateRecyclerData(ArrayList<Country> countries) {
+//        mSearchListAdapter.setData();
+//        mSearchListAdapter.notifyDataSetChanged();
+//        mRecyclerView.scrollToPosition(0);
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements Notify {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mProgressBar = ((ProgressBar) findViewById(R.id.progressBar));
         mSearchField = ((EditText) findViewById(R.id.searchField));
-
 
         mStateManager.updateCountryList(this);
 
@@ -95,9 +96,15 @@ public class MainActivity extends AppCompatActivity implements Notify {
     }
 
     @Override
-    public void sendNotify() {
-        mStateManager.sortByName();
-        mRecyclerAdapter = new CountryListAdapter(mStateManager.getCountriesList());
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+    public void sendNotify(ArrayList<ListItem> listItems) {
+        showList();
+        mCountryListAdapter = new CountryListAdapter(listItems);
+        mRecyclerView.setAdapter(mCountryListAdapter);
+    }
+
+    public void showList() {
+        mSearchField.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.INVISIBLE);
     }
 }

@@ -2,6 +2,7 @@ package com.example.nick.countrypedia.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,7 +31,9 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back);
 
         mSettingsManager = SettingsManager.getInstance();
 
@@ -56,9 +59,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         mCheckBoxGroup.addCheckBox(mCountryCheck);
         mCheckBoxGroup.addCheckBox(mCapitalCheck);
-
-//        checkBoxClicked(SearchParameter.BY_COUNTRY, searchCountry);
-//        checkBoxClicked(SearchParameter.BY_CAPITAL, searchCapital);
 
         switch (mSettingsManager.getDisplayParameter()) {
             case REGION:

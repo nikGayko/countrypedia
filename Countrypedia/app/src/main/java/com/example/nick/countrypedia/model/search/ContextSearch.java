@@ -1,6 +1,6 @@
 package com.example.nick.countrypedia.model.search;
 
-import com.example.nick.countrypedia.Country;
+import com.example.nick.countrypedia.view.item.Country;
 import com.example.nick.countrypedia.model.parameter.SearchParameter;
 
 import java.util.ArrayList;

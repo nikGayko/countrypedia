@@ -50,11 +50,6 @@ public class SettingsManager {
 
     }
 
-    public void setSearchCapital(boolean searchCapital, Context context) {
-        writeBooleanChange(CAPITAL, searchCapital, context);
-        setSearchCapital(searchCapital);
-    }
-
     private void setSearchCountry(boolean searchCountry) {
         mSearchCountry = searchCountry;
         if (searchCountry) {
@@ -62,6 +57,11 @@ public class SettingsManager {
         } else {
             mStateManager.removeSearchParameter(SearchParameter.BY_COUNTRY);
         }
+    }
+
+    public void setSearchCapital(boolean searchCapital, Context context) {
+        writeBooleanChange(CAPITAL, searchCapital, context);
+        setSearchCapital(searchCapital);
     }
 
     private void setSearchCapital(boolean searchCapital) {
@@ -82,8 +82,13 @@ public class SettingsManager {
     }
 
     public void setDisplayParameter(DisplayParameter displayParameter, Context context) {
-        mDisplayParameter = displayParameter;
         writeIntegerChange(DISPLAY, displayParameter.getValue(), context);
+        setDisplayParameter(displayParameter);
+    }
+
+    private void setDisplayParameter(DisplayParameter displayParameter) {
+        mDisplayParameter = displayParameter;
+        mStateManager.displayListUpdated(displayParameter);
     }
 
     private void writeBooleanChange(String key, boolean value, Context context) {

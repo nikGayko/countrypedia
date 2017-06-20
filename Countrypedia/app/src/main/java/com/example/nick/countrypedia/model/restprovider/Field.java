@@ -16,6 +16,11 @@ public enum Field {
         String getValue() {
             return "capital";
         }
+    }, FLAG {
+        @Override
+        String getValue() {
+            return "flag";
+        }
     };
 
     abstract String getValue();

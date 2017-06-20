@@ -1,6 +1,9 @@
 package com.example.nick.countrypedia.model.restprovider;
 
-import com.example.nick.countrypedia.Country;
+import android.graphics.Bitmap;
+
+import com.example.nick.countrypedia.model.Predicate;
+import com.example.nick.countrypedia.view.item.Country;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -14,20 +17,15 @@ public class Provider {
 
     private final String ALL = "https://restcountries.eu/rest/v2/all";
 
-    private HttpClient mHttpClient;
-
-    public Provider() {
-        mHttpClient = new HttpClient();
-    }
-
-    public ArrayList<Country> getAllCountries(Field... fields) {
+    public ArrayList<Country> getAllCountries(Predicate<Country> predicate, Field... fields) {
         ArrayList<Country> countries = null;
 
-        mHttpClient.execute(ALL + getFieldsRequest(fields));
+        HttpClient httpClient = new HttpClient();
+        httpClient.execute(ALL + getFieldsRequest(fields));
         try {
-            String json = mHttpClient.get();
+            String json = httpClient.get();
             JSONArray jsonArray = new JSONArray(json);
-            countries = parseCountryJSONArray(new Gson(), jsonArray);
+            countries = parseCountryJSONArray(new Gson(), jsonArray, predicate);
         } catch (InterruptedException | ExecutionException | JSONException e) {
             e.printStackTrace();
         }
@@ -48,11 +46,22 @@ public class Provider {
         }
     }
 
-    private ArrayList<Country> parseCountryJSONArray(Gson gson, JSONArray jsonArray) throws JSONException {
+    private ArrayList<Country> parseCountryJSONArray(Gson gson, JSONArray jsonArray, Predicate<Country> predicate) throws JSONException, ExecutionException, InterruptedException {
         ArrayList<Country> countries = new ArrayList<>();
         for (int z = 0; z < jsonArray.length(); z++) {
-            Country country = parseCountryJSON(gson, jsonArray.getJSONObject(z));
-            countries.add(country);
+            JSONObject jCountry = jsonArray.getJSONObject(z);
+            Country country = parseCountryJSON(gson, jCountry);
+
+            if (predicate.apply(country)) {
+                countries.add(country);
+            } else {
+                continue;
+            }
+
+            ImageLoader imageLoader = new ImageLoader();
+            imageLoader.execute(jCountry.getString("flag"));
+            Bitmap bitmap = imageLoader.get();
+            country.setFlag(bitmap);
         }
         return countries;
     }

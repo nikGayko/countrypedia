@@ -1,9 +1,8 @@
 package com.example.nick.countrypedia.model.search;
 
-import com.example.nick.countrypedia.Country;
+import com.example.nick.countrypedia.view.item.Country;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class SearchCapital implements Search {
 
