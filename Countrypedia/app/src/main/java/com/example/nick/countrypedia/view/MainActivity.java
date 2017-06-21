@@ -61,9 +61,9 @@ public class MainActivity extends AppCompatActivity implements Notify {
     View.OnClickListener mItemClicked = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(v.getContext(), CountryActivity.class);
-            intent.putExtra("id", ((int) v.getTag()));
-            startActivity(intent);
+//            Intent intent = new Intent(v.getContext(), CountryActivity.class);
+//            intent.putExtra("id", ((int) v.getTag()));
+//            startActivity(intent);
         }
     };
 //    private void updateRecyclerData(ArrayList<Country> countries) {

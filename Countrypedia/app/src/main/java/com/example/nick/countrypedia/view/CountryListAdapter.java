@@ -33,7 +33,7 @@ class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         mClickListener = clickListener;
         mCountriesList = countries;
 
-        mImageLoader = new ImageLoader(15);
+        mImageLoader = new ImageLoader();
     }
 
     public void setData(ArrayList<ListItem> countriesList) {
@@ -72,14 +72,7 @@ class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 bodyView.mCapital.setText(country.getCapital());
                 bodyView.mCountry.setText(country.getName());
                 bodyView.mView.setTag(country.getName());
-                Handler handler = new Handler(new Handler.Callback() {
-                    @Override
-                    public boolean handleMessage(Message msg) {
-                        bodyView.mFlag.setImageBitmap(((Bitmap) msg.obj));
-                        return false;
-                    }
-                });
-                mImageLoader.loadImage(country.getFlag(), handler);
+                mImageLoader.drawBitmap(country.getFlag(), bodyView.mFlag);
                 break;
             }
             default:

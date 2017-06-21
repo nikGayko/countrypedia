@@ -5,35 +5,51 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
 import android.os.Handler;
+import android.os.Message;
+import android.util.LruCache;
+import android.widget.ImageView;
 
 import com.caverock.androidsvg.SVG;
 
-import java.util.LinkedList;
 import java.util.concurrent.ExecutionException;
 
 public class ImageLoader {
 
-    LinkedList<Thread> mThreadList;
-    private final int CAPACITY;
+    LruCache<String, Bitmap> mLruCache;
+    private final int MAX_SIZE = 10 * 1024 * 1024;
 
-    public ImageLoader(int capacity) {
-        CAPACITY = capacity;
-        mThreadList = new LinkedList<>();
+    public ImageLoader() {
+        mLruCache = new LruCache<>(MAX_SIZE);
     }
 
-    public void loadImage(final String url, final Handler handler) {
-        if (mThreadList.size() == CAPACITY) {
-            Thread slow = mThreadList.getLast();
-            boolean alive = slow.isAlive();
-            slow.interrupt();
-            mThreadList.removeLast();
+    private final Object lock = new Object();
+
+    public void drawBitmap(final String url, ImageView imageView) {
+        synchronized (lock) {
+            Bitmap bitmap = mLruCache.get(url);
+            if (bitmap != null) {
+                imageView.setImageBitmap(bitmap);
+                return;
+            }
         }
-        Thread thread = initThread(url, handler);
-        mThreadList.addFirst(thread);
+
+        final Handler handler = new Handler();
+        Thread thread = initThread(url, handler, new BitmapResultCallback(url, imageView) {
+            @Override
+            public void onSuccess(Bitmap bitmap) {
+                synchronized (lock) {
+                    if (bitmap != null) {
+                        mLruCache.put(url, bitmap);
+                    }
+                }
+                super.onSuccess(bitmap);
+            }
+        });
+
         thread.start();
     }
 
-    private Thread initThread(final String url, final Handler handler) {
+    private Thread initThread(final String url, final Handler handler, final OnResultCallback<Bitmap> callback) {
         return new Thread(new Runnable() {
             @Override
             public void run() {
@@ -42,13 +58,14 @@ public class ImageLoader {
                     imageLoader.execute(url);
                     SVG svg = imageLoader.get();
                     Drawable drawable = new PictureDrawable(svg.renderToPicture());
-                    Bitmap bitmap = convertToBitmap(drawable, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+                    final Bitmap bitmap = convertToBitmap(drawable, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
 
-                    if (Thread.currentThread().isInterrupted())
-                        return;
-
-                    handler.obtainMessage(1, bitmap).sendToTarget();
-
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onSuccess(bitmap);
+                        }
+                    });
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
