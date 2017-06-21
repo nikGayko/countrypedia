@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.SettingsActivity"/>
-        <activity android:name=".view.CountryActivity"/>
+        <activity android:name=".view.CountryActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
     </application>
 
 </manifest>

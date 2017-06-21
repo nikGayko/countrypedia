@@ -10,6 +10,7 @@ import com.caverock.androidsvg.SVG;
 import com.example.nick.countrypedia.model.Predicate;
 import com.example.nick.countrypedia.view.item.Country;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,7 +22,7 @@ import java.util.concurrent.ExecutionException;
 public class Provider {
 
     private final String ALL = "https://restcountries.eu/rest/v2/all";
-    private final String COUNTRY = "https://restcountries.eu/rest/v2/all";
+    private final String COUNTRY = "https://restcountries.eu/rest/v2/name/";
 
     public ArrayList<Country> getAllCountries(Predicate<Country> predicate, Field... fields) {
         ArrayList<Country> countries = null;
@@ -37,6 +38,24 @@ public class Provider {
         }
 
         return countries;
+    }
+
+    public Country getCountry(String countryName) {
+        String url = COUNTRY + countryName.replaceAll(" ", "%20") + "?fullText=true";
+
+        HttpClient httpClient = new HttpClient();
+        httpClient.execute(url);
+        try {
+            String json = httpClient.get();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Country.class, new CountryDeserializer())
+                    .create();
+            Country country = parseCountryJSON(gson, new JSONArray(json).getJSONObject(0));
+            return country;
+        } catch (InterruptedException | ExecutionException | JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private String getFieldsRequest(Field fields[]) {

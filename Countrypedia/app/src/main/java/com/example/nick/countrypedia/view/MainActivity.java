@@ -13,8 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
-import com.example.nick.countrypedia.Notify;
+import com.example.nick.countrypedia.NotifyList;
 import com.example.nick.countrypedia.R;
 import com.example.nick.countrypedia.model.SettingsManager;
 import com.example.nick.countrypedia.model.StateManager;
@@ -23,7 +24,7 @@ import com.example.nick.countrypedia.view.item.ListItem;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements Notify {
+public class MainActivity extends AppCompatActivity implements NotifyList {
 
     StateManager mStateManager;
 
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements Notify {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(v.getContext(), CountryActivity.class);
-            intent.putExtra("id", ((int) v.getTag()));
+            intent.putExtra("id", ((TextView) v.findViewById(R.id.countryLabel)).getText().toString());
             startActivity(intent);
         }
     };

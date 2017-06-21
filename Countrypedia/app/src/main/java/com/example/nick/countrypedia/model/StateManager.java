@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.example.nick.countrypedia.Notify;
+import com.example.nick.countrypedia.NotifyList;
 import com.example.nick.countrypedia.model.parameter.DisplayParameter;
 import com.example.nick.countrypedia.model.parameter.SearchParameter;
 import com.example.nick.countrypedia.model.restprovider.Field;
@@ -18,7 +18,6 @@ import com.example.nick.countrypedia.view.item.ListItem;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 public class StateManager implements Search {
 
@@ -42,7 +41,7 @@ public class StateManager implements Search {
 
     private Provider mProvider;
     private ContextSearch mContextSearch;
-    private Notify mListUpdate;
+    private NotifyList mListUpdate;
 
     private Predicate<Country> mCountryPredicate = new Predicate<Country>() {
         @Override
@@ -60,8 +59,8 @@ public class StateManager implements Search {
     }
 
 
-    public void updateCountryList(final Notify notify) {
-        mListUpdate = notify;
+    public void updateCountryList(final NotifyList notifyList) {
+        mListUpdate = notifyList;
         final Handler handler = new Handler() {
             @Override
             public void dispatchMessage(Message msg) {

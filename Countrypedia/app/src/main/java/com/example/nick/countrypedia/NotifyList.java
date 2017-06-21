@@ -4,6 +4,6 @@ import com.example.nick.countrypedia.view.item.ListItem;
 
 import java.util.ArrayList;
 
-public interface Notify {
+public interface NotifyList {
     void sendNotify(ArrayList<ListItem> listItems);
 }
