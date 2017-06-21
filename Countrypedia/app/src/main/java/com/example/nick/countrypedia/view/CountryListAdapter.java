@@ -12,12 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.nick.countrypedia.R;
+import com.example.nick.countrypedia.model.ImageLoader.ImageLoader;
 import com.example.nick.countrypedia.model.restprovider.Provider;
 import com.example.nick.countrypedia.view.item.Country;
 import com.example.nick.countrypedia.view.item.Group;
 import com.example.nick.countrypedia.view.item.ListItem;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,13 +27,13 @@ class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<ListItem> mCountriesList;
     private View.OnClickListener mClickListener;
 
-    private HashMap<Integer, ImageView> mCache;
+    private ImageLoader mImageLoader;
 
     CountryListAdapter(ArrayList<ListItem> countries, View.OnClickListener clickListener, Context context) {
         mClickListener = clickListener;
         mCountriesList = countries;
 
-        mCache = new HashMap<>();
+        mImageLoader = new ImageLoader();
     }
 
     public void setData(ArrayList<ListItem> countriesList) {
@@ -73,15 +72,7 @@ class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 bodyView.mCapital.setText(country.getCapital());
                 bodyView.mCountry.setText(country.getName());
                 bodyView.mView.setTag(country.getName());
-                Handler handler = new Handler(new Handler.Callback() {
-                    @Override
-                    public boolean handleMessage(Message msg) {
-                        int adapterPosition = holder.getAdapterPosition();
-                        bodyView.mFlag.setImageBitmap(((Bitmap) msg.obj));
-                        return false;
-                    }
-                });
-                new Provider().loadCountryFlag(country, handler, position);
+                mImageLoader.drawBitmap(country.getFlag(), bodyView.mFlag);
                 break;
             }
             default:

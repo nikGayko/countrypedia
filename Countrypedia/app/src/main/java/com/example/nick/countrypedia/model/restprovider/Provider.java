@@ -86,37 +86,8 @@ public class Provider {
         return countries;
     }
 
-    public void loadCountryFlag(final Country country, final Handler handler, final  int position) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ImageLoader imageLoader = new ImageLoader();
-                try {
-                    imageLoader.execute(country.getFlag());
-                    SVG svg = imageLoader.get();
-                    Drawable drawable = new PictureDrawable(svg.renderToPicture());
-                    Bitmap bitmap = convertToBitmap(drawable, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-
-                    handler.obtainMessage(position, bitmap).sendToTarget();
-
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
     private Country parseCountryJSON(Gson gson, JSONObject jsonObject) {
         String string = jsonObject.toString();
         return gson.fromJson(string, Country.class);
-    }
-
-    private Bitmap convertToBitmap(Drawable drawable, int widthPixels, int heightPixels) {
-        Bitmap mutableBitmap = Bitmap.createBitmap(widthPixels, heightPixels, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(mutableBitmap);
-        drawable.setBounds(0, 0, widthPixels, heightPixels);
-        drawable.draw(canvas);
-
-        return mutableBitmap;
     }
 }
