@@ -1,33 +1,33 @@
 package com.example.nick.countrypedia.model.restprovider;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.PictureDrawable;
+import android.graphics.Picture;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 
-import com.larvalabs.svgandroid.SVG;
-import com.larvalabs.svgandroid.SVGParser;
+import com.caverock.androidsvg.SVG;
+import com.caverock.androidsvg.SVGAndroidRenderer;
+import com.caverock.androidsvg.SVGImageView;
+import com.caverock.androidsvg.SVGParseException;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 
-public class ImageLoader extends AsyncTask<String, Void, PictureDrawable> {
+public class ImageLoader extends AsyncTask<String, Void, SVG> {
 
     @Override
-    protected PictureDrawable doInBackground(String... params) {
+    protected SVG doInBackground(String... params) {
         URL url;
         Bitmap bmp;
         try {
             url = new URL(params[0]);
-            SVG svg = SVGParser.getSVGFromInputStream(url.openConnection().getInputStream());
-            return svg.createPictureDrawable();
-        } catch (IOException e) {
+            InputStream is = url.openConnection().getInputStream();
+            return SVG.getFromInputStream(is);
+        } catch (IOException | SVGParseException e) {
             e.printStackTrace();
-            throw new IllegalStateException("Connection Error");
+            return null;
         }
     }
 }

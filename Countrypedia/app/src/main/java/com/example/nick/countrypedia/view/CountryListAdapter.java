@@ -1,26 +1,40 @@
 package com.example.nick.countrypedia.view;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.nick.countrypedia.R;
+import com.example.nick.countrypedia.model.restprovider.Provider;
 import com.example.nick.countrypedia.view.item.Country;
 import com.example.nick.countrypedia.view.item.Group;
 import com.example.nick.countrypedia.view.item.ListItem;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ArrayList<ListItem> mCountriesList;
+    private View.OnClickListener mClickListener;
 
-    CountryListAdapter(ArrayList<ListItem> countries) {
+    private HashMap<Integer, ImageView> mCache;
 
+    CountryListAdapter(ArrayList<ListItem> countries, View.OnClickListener clickListener, Context context) {
+        mClickListener = clickListener;
         mCountriesList = countries;
+
+        mCache = new HashMap<>();
     }
 
     public void setData(ArrayList<ListItem> countriesList) {
@@ -33,6 +47,7 @@ class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         switch (viewType) {
             case ListItem.TYPE_BODY:
                 View bodyView = inflater.inflate(R.layout.view_country, viewGroup, false);
+                bodyView.setOnClickListener(mClickListener);
                 return new BodyViewHolder(bodyView);
 
             case ListItem.TYPE_HEADER:
@@ -44,7 +59,7 @@ class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         int viewType = getItemViewType(position);
         switch (viewType) {
             case ListItem.TYPE_HEADER: {
@@ -54,9 +69,19 @@ class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
             case ListItem.TYPE_BODY: {
                 Country country = (Country) mCountriesList.get(position);
-                BodyViewHolder bodyView = (BodyViewHolder) holder;
+                final BodyViewHolder bodyView = (BodyViewHolder) holder;
                 bodyView.mCapital.setText(country.getCapital());
                 bodyView.mCountry.setText(country.getName());
+                bodyView.mView.setTag(country.getName());
+                Handler handler = new Handler(new Handler.Callback() {
+                    @Override
+                    public boolean handleMessage(Message msg) {
+                        int adapterPosition = holder.getAdapterPosition();
+                        bodyView.mFlag.setImageBitmap(((Bitmap) msg.obj));
+                        return false;
+                    }
+                });
+                new Provider().loadCountryFlag(country, handler, position);
                 break;
             }
             default:
@@ -74,6 +99,12 @@ class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return mCountriesList.get(position).getType();
     }
 
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+
+        super.onDetachedFromRecyclerView(recyclerView);
+    }
+
     private static class HeaderViewHolder extends RecyclerView.ViewHolder {
 
         TextView mGroupName;
@@ -86,13 +117,17 @@ class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static class BodyViewHolder extends RecyclerView.ViewHolder {
 
+        View mView;
         TextView mCountry;
         TextView mCapital;
+        ImageView mFlag;
 
         BodyViewHolder(View itemView) {
             super(itemView);
+            mView = itemView;
             mCountry = ((TextView) itemView.findViewById(R.id.countryLabel));
             mCapital = ((TextView) itemView.findViewById(R.id.capitalLabel));
+            mFlag = ((ImageView) itemView.findViewById(R.id.flag));
         }
     }
 

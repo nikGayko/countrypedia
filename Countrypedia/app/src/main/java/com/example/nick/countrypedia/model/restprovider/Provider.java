@@ -1,7 +1,12 @@
 package com.example.nick.countrypedia.model.restprovider;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.PictureDrawable;
+import android.os.Handler;
 
+import com.caverock.androidsvg.SVG;
 import com.example.nick.countrypedia.model.Predicate;
 import com.example.nick.countrypedia.view.item.Country;
 import com.google.gson.Gson;
@@ -16,6 +21,7 @@ import java.util.concurrent.ExecutionException;
 public class Provider {
 
     private final String ALL = "https://restcountries.eu/rest/v2/all";
+    private final String COUNTRY = "https://restcountries.eu/rest/v2/all";
 
     public ArrayList<Country> getAllCountries(Predicate<Country> predicate, Field... fields) {
         ArrayList<Country> countries = null;
@@ -46,28 +52,52 @@ public class Provider {
         }
     }
 
-    private ArrayList<Country> parseCountryJSONArray(Gson gson, JSONArray jsonArray, Predicate<Country> predicate) throws JSONException, ExecutionException, InterruptedException {
+    private ArrayList<Country> parseCountryJSONArray(final Gson gson, final JSONArray jsonArray, final Predicate<Country> predicate)
+            throws JSONException, ExecutionException, InterruptedException {
         ArrayList<Country> countries = new ArrayList<>();
         for (int z = 0; z < jsonArray.length(); z++) {
-            JSONObject jCountry = jsonArray.getJSONObject(z);
-            Country country = parseCountryJSON(gson, jCountry);
+            final JSONObject jCountry = jsonArray.getJSONObject(z);
+            final Country country = parseCountryJSON(gson, jCountry);
 
             if (predicate.apply(country)) {
                 countries.add(country);
-            } else {
-                continue;
             }
 
-            ImageLoader imageLoader = new ImageLoader();
-            imageLoader.execute(jCountry.getString("flag"));
-            Bitmap bitmap = imageLoader.get();
-            country.setFlag(bitmap);
         }
         return countries;
+    }
+
+    public void loadCountryFlag(final Country country, final Handler handler, final  int position) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ImageLoader imageLoader = new ImageLoader();
+                try {
+                    imageLoader.execute(country.getFlag());
+                    SVG svg = imageLoader.get();
+                    Drawable drawable = new PictureDrawable(svg.renderToPicture());
+                    Bitmap bitmap = convertToBitmap(drawable, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+
+                    handler.obtainMessage(position, bitmap).sendToTarget();
+
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private Country parseCountryJSON(Gson gson, JSONObject jsonObject) {
         String string = jsonObject.toString();
         return gson.fromJson(string, Country.class);
+    }
+
+    private Bitmap convertToBitmap(Drawable drawable, int widthPixels, int heightPixels) {
+        Bitmap mutableBitmap = Bitmap.createBitmap(widthPixels, heightPixels, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(mutableBitmap);
+        drawable.setBounds(0, 0, widthPixels, heightPixels);
+        drawable.draw(canvas);
+
+        return mutableBitmap;
     }
 }

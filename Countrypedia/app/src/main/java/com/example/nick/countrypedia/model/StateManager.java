@@ -18,6 +18,7 @@ import com.example.nick.countrypedia.view.item.ListItem;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class StateManager implements Search {
 
@@ -75,7 +76,8 @@ public class StateManager implements Search {
             public void run() {
                 Message message;
                 try {
-                    ArrayList<Country> allCountries = mProvider.getAllCountries(mCountryPredicate, Field.CAPITAL, Field.NAME, Field.REGION, Field.FLAG);
+                    ArrayList<Country> allCountries = mProvider.getAllCountries(
+                            mCountryPredicate, Field.CAPITAL, Field.NAME, Field.REGION, Field.FLAG);
                     message = handler.obtainMessage(1, allCountries);
                 } catch (IllegalStateException exc) {
                     message = handler.obtainMessage(1, mCountriesList);

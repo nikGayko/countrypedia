@@ -12,14 +12,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.example.nick.countrypedia.view.item.Country;
 import com.example.nick.countrypedia.Notify;
 import com.example.nick.countrypedia.R;
 import com.example.nick.countrypedia.model.SettingsManager;
 import com.example.nick.countrypedia.model.StateManager;
+import com.example.nick.countrypedia.view.item.Country;
 import com.example.nick.countrypedia.view.item.ListItem;
 
 import java.util.ArrayList;
@@ -47,16 +46,26 @@ public class MainActivity extends AppCompatActivity implements Notify {
         @Override
         public void afterTextChanged(Editable s) {
             String searchQuery = s.toString();
-            if(!searchQuery.equals("")) {
+            if (!searchQuery.equals("")) {
                 searchQuery = searchQuery.substring(0, 1).toUpperCase() + searchQuery.substring(1);
                 ArrayList<Country> search = mStateManager.search(mStateManager.getCountriesList(), searchQuery);
-                mRecyclerView.setAdapter(new CountryListAdapter(new ArrayList<ListItem>(search)));
+                mRecyclerView.setAdapter(new CountryListAdapter(
+                        new ArrayList<ListItem>(search), mItemClicked, getApplicationContext())
+                );
             } else {
                 mRecyclerView.setAdapter(mCountryListAdapter);
             }
         }
     };
 
+    View.OnClickListener mItemClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(v.getContext(), CountryActivity.class);
+            intent.putExtra("id", ((int) v.getTag()));
+            startActivity(intent);
+        }
+    };
 //    private void updateRecyclerData(ArrayList<Country> countries) {
 //        mSearchListAdapter.setData();
 //        mSearchListAdapter.notifyDataSetChanged();
@@ -66,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements Notify {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         SettingsManager.getInstance().initialization(this);
 
@@ -73,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements Notify {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mProgressBar = ((ProgressBar) findViewById(R.id.progressBar));
         mSearchField = ((EditText) findViewById(R.id.searchField));
-
         mStateManager.updateCountryList(this);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
@@ -98,8 +107,16 @@ public class MainActivity extends AppCompatActivity implements Notify {
     @Override
     public void sendNotify(ArrayList<ListItem> listItems) {
         showList();
-        mCountryListAdapter = new CountryListAdapter(listItems);
+        mCountryListAdapter = new CountryListAdapter(listItems, mItemClicked, getApplicationContext());
         mRecyclerView.setAdapter(mCountryListAdapter);
+
+        optimize();
+    }
+
+    private void optimize() {
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setItemViewCacheSize(25);
+        mRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
     }
 
     public void showList() {

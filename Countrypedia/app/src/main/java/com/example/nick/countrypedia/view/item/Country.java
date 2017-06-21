@@ -1,7 +1,5 @@
 package com.example.nick.countrypedia.view.item;
 
-import android.graphics.Bitmap;
-
 import com.google.gson.annotations.SerializedName;
 
 public class Country extends ListItem {
@@ -15,7 +13,8 @@ public class Country extends ListItem {
     @SerializedName("region")
     private String mRegion;
 
-    private Bitmap mFlag;
+    @SerializedName("flag")
+    private String mFlag;
 
     public Country(String name, String capital, String region) {
         mName = name;
@@ -23,7 +22,7 @@ public class Country extends ListItem {
         mRegion = region;
     }
 
-    public Country(String name, String capital, String region, Bitmap flag) {
+    public Country(String name, String capital, String region, String flag) {
         this(name, capital, region);
         mFlag = flag;
     }
@@ -41,11 +40,11 @@ public class Country extends ListItem {
         return mRegion;
     }
 
-    public Bitmap getFlag() {
+    public String getFlag() {
         return mFlag;
     }
 
-    public void setFlag(Bitmap flag) {
+    public void setFlag(String flag) {
         mFlag = flag;
     }
 
