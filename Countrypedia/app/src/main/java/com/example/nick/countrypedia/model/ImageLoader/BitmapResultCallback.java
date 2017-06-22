@@ -10,19 +10,23 @@ public class BitmapResultCallback implements OnResultCallback<Bitmap> {
     private String value;
     private final WeakReference<ImageView> mImageViewReference;
 
-    public BitmapResultCallback(String value, ImageView imageView) {
+    public BitmapResultCallback(String value, final ImageView imageView) {
         this.value = value;
-        mImageViewReference = new WeakReference<ImageView>(imageView);
         imageView.setTag(value);
+        mImageViewReference = new WeakReference<>(imageView);
     }
+
+    private final Object lock = new Object();
 
     @Override
     public void onSuccess(Bitmap bitmap) {
-        ImageView imageView = this.mImageViewReference.get();
-        if (imageView != null) {
-            Object tag = imageView.getTag();
-            if (tag != null && tag.equals(value)) {
-                imageView.setImageBitmap(bitmap);
+        synchronized (lock) {
+            ImageView imageView = this.mImageViewReference.get();
+            if (imageView != null) {
+                Object tag = imageView.getTag();
+                if (tag != null && tag.equals(value)) {
+                    imageView.setImageBitmap(bitmap);
+                }
             }
         }
     }

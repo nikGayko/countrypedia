@@ -72,6 +72,7 @@ class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 bodyView.mCapital.setText(country.getCapital());
                 bodyView.mCountry.setText(country.getName());
                 bodyView.mView.setTag(country.getName());
+                bodyView.mFlag.setTag(country.getFlag());
                 mImageLoader.drawBitmap(country.getFlag(), bodyView.mFlag);
                 break;
             }
@@ -88,12 +89,6 @@ class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemViewType(int position) {
         return mCountriesList.get(position).getType();
-    }
-
-    @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-
-        super.onDetachedFromRecyclerView(recyclerView);
     }
 
     private static class HeaderViewHolder extends RecyclerView.ViewHolder {
