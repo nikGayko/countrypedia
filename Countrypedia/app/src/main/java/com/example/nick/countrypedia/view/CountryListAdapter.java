@@ -33,7 +33,7 @@ class CountryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         mClickListener = clickListener;
         mCountriesList = countries;
 
-        mImageLoader = new ImageLoader();
+        mImageLoader = ImageLoader.getLoader();
     }
 
     public void setData(ArrayList<ListItem> countriesList) {

@@ -16,10 +16,19 @@ import java.util.concurrent.ExecutionException;
 public class ImageLoader {
 
     LruCache<String, Bitmap> mLruCache;
-    private final int MAX_SIZE = 10 * 1024 * 1024;
+    private final int MAX_SIZE = 20 * 1024 * 1024;
 
-    public ImageLoader() {
+    private static ImageLoader singlton;
+
+    private ImageLoader() {
         mLruCache = new LruCache<>(MAX_SIZE);
+    }
+
+    public static synchronized ImageLoader getLoader() {
+        if(singlton == null) {
+            singlton = new ImageLoader();
+        }
+        return singlton;
     }
 
     private final Object lock = new Object();

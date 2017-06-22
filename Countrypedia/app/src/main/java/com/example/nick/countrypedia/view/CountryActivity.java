@@ -10,16 +10,21 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 
 import com.example.nick.countrypedia.NotifyObject;
 import com.example.nick.countrypedia.R;
+import com.example.nick.countrypedia.model.ImageLoader.ImageLoader;
 import com.example.nick.countrypedia.model.restprovider.Provider;
 import com.example.nick.countrypedia.view.item.Country;
 
+import java.text.Normalizer;
+
 public class CountryActivity extends AppCompatActivity implements NotifyObject{
 
+    ImageView mFlag;
     EditText mCountry;
     EditText mCapital;
     EditText mRegion;
@@ -43,6 +48,7 @@ public class CountryActivity extends AppCompatActivity implements NotifyObject{
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back);
 
+        mFlag = ((ImageView) findViewById(R.id.image_flag));
         mCountry = (EditText) findViewById(R.id.country);
         mCapital = ((EditText) findViewById(R.id.capital));
         mRegion  = ((EditText) findViewById(R.id.region));
@@ -89,14 +95,16 @@ public class CountryActivity extends AppCompatActivity implements NotifyObject{
     private void displayCountry(Country country) {
         mProgressBar.setVisibility(View.INVISIBLE);
         mScrollView.setVisibility(View.VISIBLE);
-        
+
+        ImageLoader.getLoader().drawBitmap(country.getFlag(), mFlag);
         mCountry.setText(country.getName());
         mCapital.setText(country.getCapital());
         mRegion.setText(country.getRegion());
         mSubRegion.setText(country.getSubRegion());
-        mPopulation.setText(String.valueOf(country.getPopulation()));
-        mArea.setText(String.valueOf(country.getArea()));
+        mPopulation.setText(Formatter.seperate(country.getPopulation(), 3, ' '));
+        mArea.setText(Formatter.seperate(country.getArea(), 3, ' ') + " km²");
         mCurrency.setText(country.getCurrency());
         mLanguage.setText(country.getLanguage());
+
     }
 }
