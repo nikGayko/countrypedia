@@ -22,16 +22,19 @@ class CountryDeserializer implements JsonDeserializer<Country>{
 
         Country country = new Country(name, capital, region, flag);
 
-        country.setSubRegion(jCountry.get("subregion").getAsString());
-        country.setPopulation(jCountry.get("population").getAsLong());
-        country.setArea(jCountry.get("area").getAsLong());
-        country.setCurrency(jCountry.get("currencies").getAsJsonArray()
-            .get(0).getAsJsonObject().get("name").getAsString()
-        );
-        country.setLanguage(jCountry.get("languages").getAsJsonArray()
-            .get(0).getAsJsonObject().get("name").getAsString()
-        );
-
+        try {
+            country.setSubRegion(jCountry.get("subregion").getAsString());
+            country.setPopulation(jCountry.get("population").getAsLong());
+            country.setArea(jCountry.get("area").getAsLong());
+            country.setCurrency(jCountry.get("currencies").getAsJsonArray()
+                    .get(0).getAsJsonObject().get("name").getAsString()
+            );
+            country.setLanguage(jCountry.get("languages").getAsJsonArray()
+                    .get(0).getAsJsonObject().get("name").getAsString()
+            );
+        }catch (NullPointerException exc) {
+            return country;
+        }
         return country;
     }
 }

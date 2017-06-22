@@ -1,18 +1,18 @@
 package com.example.nick.countrypedia.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.example.nick.countrypedia.NotifyObject;
 import com.example.nick.countrypedia.R;
@@ -20,9 +20,7 @@ import com.example.nick.countrypedia.model.ImageLoader.ImageLoader;
 import com.example.nick.countrypedia.model.restprovider.Provider;
 import com.example.nick.countrypedia.view.item.Country;
 
-import java.text.Normalizer;
-
-public class CountryActivity extends AppCompatActivity implements NotifyObject{
+public class CountryActivity extends AppCompatActivity implements NotifyObject {
 
     ImageView mFlag;
     EditText mCountry;
@@ -51,7 +49,7 @@ public class CountryActivity extends AppCompatActivity implements NotifyObject{
         mFlag = ((ImageView) findViewById(R.id.image_flag));
         mCountry = (EditText) findViewById(R.id.country);
         mCapital = ((EditText) findViewById(R.id.capital));
-        mRegion  = ((EditText) findViewById(R.id.region));
+        mRegion = ((EditText) findViewById(R.id.region));
         mSubRegion = ((EditText) findViewById(R.id.sub_region));
         mPopulation = ((EditText) findViewById(R.id.population));
         mArea = ((EditText) findViewById(R.id.area));
