@@ -100,8 +100,20 @@ public class MainActivity extends AppCompatActivity implements NotifyList {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+        Intent intent = null;
+        switch (item.getItemId()) {
+            case R.id.action_sort:
+                intent = new Intent(this, SettingsActivity.class);
+            break;
+
+            case R.id.action_map:
+                intent = new Intent(this, MapsActivity.class);
+        }
+
+        if(intent != null) {
+            startActivity(intent);
+        }
+
         return true;
     }
 

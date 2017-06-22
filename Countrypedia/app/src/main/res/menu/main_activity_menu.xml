@@ -3,9 +3,17 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_favorite"
+        android:id="@+id/action_map"
+        android:icon="@drawable/ic_map"
+        app:showAsAction="ifRoom"
+        android:title="@string/map"/>
+
+    <item
+        android:id="@+id/action_sort"
         android:icon="@drawable/ic_sort"
         app:showAsAction="always"
         android:title="@string/sort"/>
+
+
 
 </menu>
