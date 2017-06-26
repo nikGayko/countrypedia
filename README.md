@@ -14,3 +14,8 @@ To open map view user should click this:
 ![action bar](https://github.com/nikGayko/countrypedia/blob/master/actionbar(map).png)
 
 To see information on the map user need to tap on a land. After that he will see a card on the bottom of the screen with country name, country capital and flag. To see more details about country tap on this card.
+
+
+P.S 
+It will be pleased for me if you left your remarks and suggestions in issues
+Thank you:)
